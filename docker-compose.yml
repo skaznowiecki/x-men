@@ -1,0 +1,31 @@
+version: '2'
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    command: "npm run start:dev"
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    networks:
+      webnet:
+  redis:
+    image: redis:3.2
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    entrypoint: redis-server --appendonly yes
+    restart: always
+    networks:
+      webnet:   
+volumes:
+  appdata:
+  redisdata:
+networks:
+  webnet:
