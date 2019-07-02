@@ -48,5 +48,7 @@ $ npm run test
 ### Production service
 
 For the product environment, use AWS EC2 and AWS Elasticache as a database.
-[a link](http://http://3.95.16.96)
+http://3.95.16.96/stats
+
+
 
