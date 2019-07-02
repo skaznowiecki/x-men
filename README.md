@@ -1,4 +1,5 @@
 # Meli X-MEN
+For the resolution of the problem, ExpressJs was used as a framework, Redis as a database. For the unit tests, the Jest library was used, and Supertest was used for the functional ones.
 
 ## Requirements
   * Docker
