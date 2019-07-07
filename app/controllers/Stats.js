@@ -1,13 +1,12 @@
-let DnaModel = require('../models/Dna');
+const DnaModel = require('../models/Dna');
 
 class StatsController {
-    
     /**
      * @description Retrieve stats of mutants and humans.
      * @param {Object} req 
      * @param {Object} res 
      */
-    static index(req, res){
+    static index(_req, res){
         DnaModel.getStats().then( data => {
             res.json(data);
         });   
