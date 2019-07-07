@@ -27,11 +27,7 @@ class Dna {
      */
     saveStats(){
         Dna.getStats().then((stats) => {
-            if(this.validIsMutant)
-                stats.count_mutant_dna++;
-            else
-                stats.count_human_dna++;
-
+            stats.count_mutant_dna++;
             stats.ratio = (stats.count_mutant_dna / stats.count_human_dna).toFixed(2);
             redis.set('stats', JSON.stringify(stats));
         });
@@ -42,16 +38,14 @@ class Dna {
      */
     static getStats(){
         return new Promise( (resolve) => {
-            redis.get('stats', ( err, stats ) => {
-                let currentStats = {
+            redis.get('stats', ( _err, stats ) => {
+                const currentStats = {
                     count_mutant_dna : 0, 
                     count_human_dna : 0, 
                     ratio: 0.0
                 };
 
-                if(stats != null){
-                    Object.assign(currentStats, JSON.parse(stats));
-                }   
+                Object.assign(currentStats, JSON.parse(stats));
                 resolve(currentStats);
             });
         });
@@ -77,11 +71,7 @@ class Dna {
      * @return {Integer}
      */
     analizyHorizontal(){
-        let count = 0;
-        this.dna.forEach(row => {
-            count += this.analizyRow(row)
-        });
-        return count;      
+        return this.dna.map(this.analizyRow).reduce((a,b) => a + b);
     }
 
     /**
@@ -89,15 +79,8 @@ class Dna {
      * @return {Integer}
      */
     analizyVertical(){       
-        let count = 0;
-        for(let i in this.dna){
-            let row = '';
-            this.dna.forEach(sequence => {
-                row = row.concat(sequence.charAt(i));
-            });
-            count += this.analizyRow(row);
-        }
-        return count;
+        return this.dna.map((_,i) => this.analizyRow(this.dna.map(e => e.charAt(i))
+            .join(''))).reduce((a,b) => a + b);
     }
 
     /**
@@ -105,25 +88,19 @@ class Dna {
      * @return {Integer}
      */
     analizyOblique(){
-        const length = this.dna.length;
+        const { length } = this.dna;
         let count = 0;
-        
-        for(let i in this.dna){
+        this.dna.forEach((_, i) => {
             let row1 = '', row2 = '', j = 0;
-            i = parseInt(i);
             while( (i + j) < length ){
                 row1 = row1.concat(this.dna[j].charAt(i + j));
                 row2 = row2.concat(this.dna[i + j].charAt(j));
                 j++;
             }
 
-            if(row1 == row2)
-                count += this.analizyRow(row1);
-            else{
-                count += this.analizyRow(row1);
-                count += this.analizyRow(row2);                
-            }
-        }
+            count += this.analizyRow(row1);
+            if(row1 != row2) count += this.analizyRow(row2);
+        });
         return count;
     }
 
@@ -133,12 +110,7 @@ class Dna {
      * @return {Integer}
      */
     analizyRow(row){
-        let count = 0;
-        DNA_SEQUENCES.forEach( seq => {
-            if(row.indexOf(seq) !== -1)
-                count++;    
-        });
-        return count;
+        return DNA_SEQUENCES.filter(seq => row.indexOf(seq) !== -1 ).length;
     }
 }
 
