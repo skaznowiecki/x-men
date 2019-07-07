@@ -1,6 +1,6 @@
-let express = require('express');
-let router = express.Router();
-let StatsController = require('../controllers/Stats');
+const express = require('express');
+const router = express.Router();
+const StatsController = require('../controllers/Stats');
 
 router.get('/', StatsController.index);
 

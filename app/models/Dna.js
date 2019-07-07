@@ -1,11 +1,10 @@
-let redis = require('../services/Redis');  
+const redis = require('../services/Redis');  
 const uuidV1 = require('uuid/v1');
 
 const MINIMUM_SEQUENCE = 2;
 const DNA_SEQUENCES = ['AAAA', 'TTTT', 'CCCC', 'GGGG'];
 
 class Dna {
-    
     /**
      * @constructor
      * @param {Array} dna  
@@ -141,7 +140,6 @@ class Dna {
         });
         return count;
     }
-
-};
+}
 
 module.exports = Dna;
